@@ -1,18 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Oyster, { OysterWord } from "./game/Oyster";
 import OysterButton from "./components/OysterButton";
 import OysterDescription from "./components/OysterDescription";
 import { Modal } from "antd";
+import { Radio } from "antd";
+
+import type { CheckboxGroupProps } from "antd/es/checkbox";
+
+const gameOptions: CheckboxGroupProps<string>["options"] = [
+  { label: "Easy", value: "easy" },
+  { label: "medium", value: "medium" },
+  { label: "hard", value: "hard" },
+];
 
 function App() {
   const [state, setState] = useState<OysterWord>();
   const [score, setScore] = useState<number>(0);
   const [savedText, setSavedText] = useState("");
 
+  const oyster = new Oyster("easy");
+  const playGame = () => {
+    const { word, meaning } = oyster.play();
+    setState({ word, meaning });
+  };
+
+  const scoreddd = () => {
+    oyster.increaseScore();
+  };
   const showGameOverModal = () => {
     Modal.error({
-      title: "Game Over",
+      title: "Oops",
       content: "Invalid selection",
     });
   };
@@ -27,12 +45,6 @@ function App() {
     setSavedText("");
   };
 
-  const oyster = new Oyster();
-  const playGame = () => {
-    const { word, meaning } = oyster.play();
-    setState({ word, meaning });
-  };
-
   const loadNext = () => {
     // compare the answer and save the score
     resetInput();
@@ -41,16 +53,16 @@ function App() {
     if (!isCorrectAnswer) {
       showGameOverModal();
     } else {
-      const { score: currentScore } = oyster.getCurrentGameScore();
-      setScore(currentScore);
       const { word, meaning } = oyster.loadNext();
       setState({ word, meaning });
+      const { score: currentScore } = oyster.getCurrentGameScore();
+      setScore(currentScore);
     }
   };
 
   return (
     <div
-      className="px-8  flex justify-center flex-col items-center py-12 h-screen   g-origin-border bg-cover bg-blend-multiply bg-gray-200"
+      className=" flex justify-center flex-col items-center overflow-y-hidden h-screen   g-origin-border bg-cover bg-blend-multiply bg-gray-200"
       id="app"
     >
       <h1 className="text-3xl font-bold  mb-4  bayon-regular ">
@@ -66,6 +78,15 @@ function App() {
             ))}
           </div>
           <OysterDescription description={state.meaning} />
+
+          <div className="flex gap-4">
+            <div className="text-indigo-500">
+              Answer: <span className="text-black">{savedText}</span>{" "}
+            </div>
+            <div className="text-green-500">
+              Score: <span className="text-black">{score}</span>
+            </div>
+          </div>
 
           <div className="flex flex-col items-center mt-8">
             <div className="flex gap-x-2 ">
@@ -83,15 +104,12 @@ function App() {
               </button>
             </div>
           </div>
-
-          <span>Answer: {savedText}</span>
-          <span>Score: {score}</span>
         </div>
       ) : (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center justify-center">
           <button
             onClick={playGame}
-            className="bg-violet-500 text-white px-4 py-2 rounded-md"
+            className="bg-violet-500 mt-3 text-white px-4 py-2 rounded-md"
           >
             Start Game
           </button>

@@ -34,12 +34,11 @@ export default class Oyster {
         this.wordList = EasyWords;
     }
     this.playerName = name;
-    this.playerScore = 0;
   }
 
-  private increaseScore() {
+  public increaseScore() {
     this.playerScore += this.SCORE_INCREMENT;
-    localStorage.setItem("oyster.Score", this.playerScore.toString());
+    console.log("current oyster score", this.playerScore);
   }
 
   private loadWord() {
@@ -69,12 +68,11 @@ export default class Oyster {
 
   public checkAnswer(answer: string): boolean {
     console.log({ answer, word: this.originalWord });
-    if (answer === this.originalWord) {
-      this.increaseScore();
-      console.log("Correct Answer", this.playerScore);
-      return true;
+    if (answer !== this.originalWord) {
+      return false;
     }
-    return false;
+    this.increaseScore();
+    return true;
   }
 
   public getCurrentGameScore() {
