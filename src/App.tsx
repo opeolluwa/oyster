@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import Oyster, { GameStatus, OysterWord } from "./game/Oyster";
+import Oyster, { OysterWord } from "./game/Oyster";
 import OysterButton from "./components/OysterButton";
 import OysterDescription from "./components/OysterDescription";
 import { Modal } from "antd";
@@ -8,7 +8,7 @@ import { Modal } from "antd";
 function App() {
   const [state, setState] = useState<OysterWord>();
   const [score, setScore] = useState<number>(0);
-  const [gameSatus, setGameStatus] = useState<GameStatus>();
+  // const [-, setGameStatus] = useState<GameStatus>();
   const [savedText, setSavedText] = useState("");
 
   const showGameOverModal = () => {
@@ -36,7 +36,7 @@ function App() {
     const isCorrectAnswer = oyster.checkAnswer(savedText);
     console.log({ isCorrectAnswer });
     if (!isCorrectAnswer) {
-      setGameStatus("over");
+      // setGameStatus("over");
       showGameOverModal();
     } else {
       const { score: currentScore } = oyster.getCurrentGameScore();
