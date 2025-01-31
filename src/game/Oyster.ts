@@ -17,8 +17,7 @@ export default class Oyster {
 
   private SCORE_INCREMENT = 10;
   private currentWord: OysterWord = { word: "", meaning: "" };
-  private originalWord: string = "";
-  private TIMER_DURATION = 30;
+  private originalWord: string = localStorage.getItem("oyster.Current") || "";
 
   constructor(level: GameLevel = "easy", name: string = "Player") {
     switch (level) {
@@ -45,6 +44,8 @@ export default class Oyster {
   private loadWord() {
     const randomIndex = Math.floor(Math.random() * this.wordList.length);
     this.currentWord = this.wordList[randomIndex];
+    localStorage.setItem("oyster.Current", this.currentWord.word);
+    this.originalWord = this.currentWord.word;
   }
 
   private randomizeWord() {
@@ -66,6 +67,7 @@ export default class Oyster {
   }
 
   public checkAnswer(answer: string): boolean {
+    console.log({ answer, word: this.originalWord });
     if (answer === this.originalWord) {
       this.increaseScore();
       return true;
@@ -73,9 +75,17 @@ export default class Oyster {
     return false;
   }
 
+  public getCurrentGameScore() {
+    return {
+      playerName: this.playerName,
+      score: this.playerScore,
+    };
+  }
+
   public loadNext() {
     this.loadWord();
     this.originalWord = this.currentWord.word;
+    localStorage.setItem("oyster.Current", this.currentWord.word);
     return {
       word: this.randomizeWord(),
       meaning: this.currentWord.meaning,
