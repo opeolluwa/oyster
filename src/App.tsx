@@ -8,7 +8,6 @@ import { Modal } from "antd";
 function App() {
   const [state, setState] = useState<OysterWord>();
   const [score, setScore] = useState<number>(0);
-  // const [-, setGameStatus] = useState<GameStatus>();
   const [savedText, setSavedText] = useState("");
 
   const showGameOverModal = () => {
@@ -24,6 +23,10 @@ function App() {
     }
   };
 
+  const resetInput = () => {
+    setSavedText("");
+  };
+
   const oyster = new Oyster();
   const playGame = () => {
     const { word, meaning } = oyster.play();
@@ -32,11 +35,10 @@ function App() {
 
   const loadNext = () => {
     // compare the answer and save the score
-    setSavedText("");
+    resetInput();
     const isCorrectAnswer = oyster.checkAnswer(savedText);
     console.log({ isCorrectAnswer });
     if (!isCorrectAnswer) {
-      // setGameStatus("over");
       showGameOverModal();
     } else {
       const { score: currentScore } = oyster.getCurrentGameScore();
@@ -66,12 +68,20 @@ function App() {
           <OysterDescription description={state.meaning} />
 
           <div className="flex flex-col items-center mt-8">
-            <button
-              onClick={loadNext}
-              className="bg-violet-500 text-white px-4 py-2 rounded-md"
-            >
-              Next
-            </button>
+            <div className="flex gap-x-2 ">
+              <button
+                onClick={loadNext}
+                className="bg-violet-500 text-white px-4 py-2 rounded-md"
+              >
+                Next
+              </button>
+              <button
+                onClick={resetInput}
+                className="border-violet-500 bg-gray-300 px-4 py-2 rounded-md"
+              >
+                Reset input
+              </button>
+            </div>
           </div>
 
           <span>Answer: {savedText}</span>

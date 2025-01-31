@@ -39,6 +39,7 @@ export default class Oyster {
 
   private increaseScore() {
     this.playerScore += this.SCORE_INCREMENT;
+    localStorage.setItem("oyster.Score", this.playerScore.toString());
   }
 
   private loadWord() {
@@ -70,6 +71,7 @@ export default class Oyster {
     console.log({ answer, word: this.originalWord });
     if (answer === this.originalWord) {
       this.increaseScore();
+      console.log("Correct Answer", this.playerScore);
       return true;
     }
     return false;
